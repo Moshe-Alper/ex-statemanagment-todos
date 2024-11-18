@@ -7,11 +7,9 @@ import { TodoList } from "../cmps/TodoList.jsx"
 import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { loadTodos } from "../store/actions/todo.action.js"
+import { loadTodos, removeTodo } from "../store/actions/todo.action.js"
 
 export function TodoIndex() {
-
-    // const [todos, setTodos] = useState(null)
     const todos = useSelector(storeState => storeState.todos)
 
     // Special hook for accessing search-params:
@@ -30,22 +28,18 @@ export function TodoIndex() {
     }, [filterBy])
 
     function onRemoveTodo(todoId) {
-        todoService.remove(todoId)
-            .then(() => {
-                // setTodos(prevTodos => prevTodos.filter(todo => todo._id !== todoId))
-                showSuccessMsg(`Todo removed`)
-            })
+        console.log('todoId:', todoId)
+        removeTodo(todoId)
+            .then(() => showSuccessMsg(`Todo removed`))
             .catch(err => {
-                console.log('err:', err)
                 showErrorMsg('Cannot remove todo ' + todoId)
             })
     }
 
     function onToggleTodo(todo) {
         const todoToSave = { ...todo, isDone: !todo.isDone }
-        todoService.save(todoToSave)
+        savedTodo(todoToSave)
             .then((savedTodo) => {
-                // setTodos(prevTodos => prevTodos.map(currTodo => (currTodo._id !== todo._id) ? currTodo : { ...savedTodo }))
                 showSuccessMsg(`Todo is ${(savedTodo.isDone)? 'done' : 'back on your list'}`)
             })
             .catch(err => {
