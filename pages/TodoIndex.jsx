@@ -11,6 +11,8 @@ import { loadTodos, removeTodo } from "../store/actions/todo.actions.js"
 
 export function TodoIndex() {
     const todos = useSelector(storeState => storeState.todos)
+    const isLoading = useSelector(storeState => storeState.isLoading)
+
 
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
@@ -49,7 +51,7 @@ export function TodoIndex() {
             })
     }
 
-    if (!todos) return <div>Loading...</div>
+    if (isLoading) return <div>Loading...</div>;
     return (
         <section className="todo-index">
             <TodoFilter filterBy={filterBy} onSetFilterBy={setFilterBy} />

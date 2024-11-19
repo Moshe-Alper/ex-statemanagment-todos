@@ -1,13 +1,16 @@
 import { todoService } from "../../services/todo.service.js";
-import { SET_TODOS, REMOVE_TODO, UPDATE_TODO, store } from "../store.js";
+import { SET_TODOS, REMOVE_TODO, UPDATE_TODO, SET_LOADING, store } from "../store.js";
 
 export function loadTodos(filterBy) {
-
+    
     return todoService.query(filterBy)
-        .then(todos => {
+    .then(todos => {
+            store.dispatch({ type: SET_LOADING, isLoading: true })
             store.dispatch({ type: SET_TODOS, todos})
+            store.dispatch({ type: SET_LOADING, isLoading: false })
         })
         .catch(err => {
+            store.dispatch({ type: SET_LOADING, isLoading: false })
             console.log('todo action -> Cannot load todos', err)
             throw err
         })
