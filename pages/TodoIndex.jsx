@@ -28,6 +28,8 @@ export function TodoIndex() {
     }, [filterBy])
 
     function onRemoveTodo(todoId) {
+        const isConfirmed = confirm(`Are you sure you want to remove this Todo?`)
+        if (!isConfirmed) return
         console.log('todoId:', todoId)
         removeTodo(todoId)
             .then(() => showSuccessMsg(`Todo removed`))
