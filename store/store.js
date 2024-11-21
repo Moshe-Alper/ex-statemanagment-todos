@@ -1,5 +1,6 @@
-const { createStore } = Redux
+const { createStore, compose } = Redux
 
+import { todoService } from "../services/todo.service.js"
 import { userService } from "../services/user.service.js"
 
 //* Todos
@@ -11,12 +12,16 @@ export const UPDATE_TODO = 'UPDATE_TODO'
 // Loading
 export const SET_LOADING = 'SET_LOADING'
 
+// Filtering
+export const SET_FILTER_BY = 'SET_FILTER_BY'
+
 //* User
 export const SET_USER = 'SET_USER'
 
 const initialState = {
     todos: [],
     isLoading: false,
+    filterBy: todoService.getDefaultFilter(),
     loggedInUser: userService.getLoggedinUser(),
 }
 
@@ -46,6 +51,13 @@ function appReducer(state = initialState, cmd = {}) {
         case SET_LOADING:
             return { ...state, isLoading: cmd.isLoading }
 
+        //* Filtering
+        case SET_FILTER_BY:
+            return {
+                ...state,
+                filterBy: { ...state.filterBy, ...cmd.filterBy }
+            }
+
         //* User
         case SET_USER:
             return {
@@ -58,7 +70,12 @@ function appReducer(state = initialState, cmd = {}) {
     }
 }
 
-export const store = createStore(appReducer)
-store.subscribe(() => {
-    console.log('Current state is:', store.getState())
-})
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+export const store = createStore(appReducer, composeEnhancers())
+
+// For Debugging
+window.gStore = store
+
+// store.subscribe(() => {
+//     console.log('Current state is:', store.getState())
+// })

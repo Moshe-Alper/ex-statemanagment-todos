@@ -1,18 +1,19 @@
 import { todoService } from "../../services/todo.service.js";
-import { SET_TODOS, REMOVE_TODO, UPDATE_TODO, SET_LOADING, store } from "../store.js";
+import { SET_TODOS, REMOVE_TODO, UPDATE_TODO, SET_LOADING, SET_FILTER_BY, store } from "../store.js";
 
-export function loadTodos(filterBy) {
+export function loadTodos(filterSort) {
     
-    return todoService.query(filterBy)
+    store.dispatch({ type: SET_LOADING, isLoading: true })
+    return todoService.query(filterSort)
     .then(todos => {
-            store.dispatch({ type: SET_LOADING, isLoading: true })
             store.dispatch({ type: SET_TODOS, todos})
-            store.dispatch({ type: SET_LOADING, isLoading: false })
         })
         .catch(err => {
-            store.dispatch({ type: SET_LOADING, isLoading: false })
             console.log('todo action -> Cannot load todos', err)
             throw err
+        })
+        .finally(() => {
+            store.dispatch({ type: SET_LOADING, isLoading: false })
         })
 }
 
@@ -38,4 +39,12 @@ export function saveTodo(todo) {
             console.log('todo action -> Cannot save todo', err)
             throw err
         })
+}
+
+export function setFilterSort(filterBy) {
+    const cmd = {
+        type: SET_FILTER_BY,
+        filterBy,
+    }
+    store.dispatch(cmd)
 }

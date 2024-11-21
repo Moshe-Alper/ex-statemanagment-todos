@@ -7,19 +7,20 @@ import { TodoList } from "../cmps/TodoList.jsx"
 import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { loadTodos, removeTodo } from "../store/actions/todo.actions.js"
+import { loadTodos, removeTodo, setFilterSort } from "../store/actions/todo.actions.js"
 
 export function TodoIndex() {
     const todos = useSelector(storeState => storeState.todos)
     const isLoading = useSelector(storeState => storeState.isLoading)
-
-
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
-
     const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
+    const filterBy = useSelector((storeState) => storeState.filterBy)
 
-    const [filterBy, setFilterBy] = useState(defaultFilter)
+
+    useEffect(() => {
+        onSetFilterSort({ ...defaultFilter })
+    }, [])
 
     useEffect(() => {
         setSearchParams(filterBy)
@@ -43,7 +44,7 @@ export function TodoIndex() {
         const todoToSave = { ...todo, isDone: !todo.isDone }
         savedTodo(todoToSave)
             .then((savedTodo) => {
-                showSuccessMsg(`Todo is ${(savedTodo.isDone)? 'done' : 'back on your list'}`)
+                showSuccessMsg(`Todo is ${(savedTodo.isDone) ? 'done' : 'back on your list'}`)
             })
             .catch(err => {
                 console.log('err:', err)
@@ -51,20 +52,29 @@ export function TodoIndex() {
             })
     }
 
-    if (isLoading) return <div>Loading...</div>;
+    function onSetFilterSort(filterSort) {
+        setFilterSort({ ...filterSort })
+    }
+
     return (
         <section className="todo-index">
-            <TodoFilter filterBy={filterBy} onSetFilterBy={setFilterBy} />
+            <TodoFilter filterBy={defaultFilter} onSetFilterBy={onSetFilterSort} />
             <div>
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>
             <h2>Todos List</h2>
-            <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />
+            {!isLoading ?
+                <TodoList todos={todos}
+                    onRemoveTodo={onRemoveTodo}
+                    onToggleTodo={onToggleTodo} />
+                : <div>Loading...</div>
+            }
             <hr />
             <h2>Todos Table</h2>
             <div style={{ width: '60%', margin: 'auto' }}>
                 <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />
             </div>
+
         </section>
     )
 }
