@@ -1,6 +1,19 @@
 import { userService } from "../../services/user.service.js";
 import { SET_USER, store } from "../store.js";
 
+export function updateUser(userToUpdate) {
+    return userService.updateUserPreffs(userToUpdate)
+        .then((updatedUser) => {
+            store.dispatch({
+                type: SET_USER,
+                user: updatedUser,
+            })
+        })
+        .catch(err => {
+            console.error('Cannot update user:', err)
+            throw err
+        })
+}
 
 export function login(credentials) {
     return userService.login(credentials)

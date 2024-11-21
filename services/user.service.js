@@ -8,7 +8,9 @@ export const userService = {
     signup,
     getById,
     query,
-    getEmptyCredentials
+    getEmptyCredentials,
+    updateUserPreffs,
+    getDefaultPrefs,
 }
 const STORAGE_KEY_LOGGEDIN = 'user'
 const STORAGE_KEY = 'userDB'
@@ -31,7 +33,13 @@ function login({ username, password }) {
 }
 
 function signup({ username, password, fullname }) {
-    const user = { username, password, fullname }
+    const user = {
+        username,
+        password,
+        fullname,
+        balance: 10000,
+        pref: getDefaultPrefs()
+    }
     user.createdAt = user.updatedAt = Date.now()
 
     return storageService.post(STORAGE_KEY, user)
@@ -47,18 +55,35 @@ function getLoggedinUser() {
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN))
 }
 
-function _setLoggedinUser(user) {
-    const userToSave = { _id: user._id, fullname: user.fullname }
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN, JSON.stringify(userToSave))
-    return userToSave
-}
-
 function getEmptyCredentials() {
     return {
         fullname: '',
         username: 'muki',
         password: 'muki1',
     }
+}
+
+function updateUserPreffs(userToUpdate) {
+    const loggedinUserId = getLoggedinUser()._id
+    return getById(loggedinUserId)
+        .then(user => {
+            user = { ...user, ...userToUpdate }
+            return storageService.put(STORAGE_KEY, user)
+                .then((savedUser) => {
+                    _setLoggedinUser(savedUser)
+                    return savedUser
+                })
+        })
+}
+
+function getDefaultPrefs() {
+    return { color: '#eeeeee', bgColor: "#191919", fullname: '' }
+}
+
+function _setLoggedinUser(user) {
+    const userToSave = { _id: user._id, fullname: user.fullname, balance: user.balance, pref: user.pref, activities: user.activities }
+    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN, JSON.stringify(userToSave))
+    return userToSave
 }
 
 // signup({username: 'muki', password: 'muki1', fullname: 'Muki Ja'})

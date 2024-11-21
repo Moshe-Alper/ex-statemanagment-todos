@@ -43,6 +43,7 @@ export function AppHeader() {
                     <NavLink to="/about" >About</NavLink>
                     <NavLink to="/todo" >Todos</NavLink>
                     <NavLink to="/dashboard" >Dashboard</NavLink>
+                    <NavLink to="/user" >User profile</NavLink>
                 </nav>
             </section>
             <UserMsg />
