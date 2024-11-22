@@ -13,7 +13,7 @@ import { logout } from '../store/actions/user.actions.js'
 export function AppHeader() {
     const navigate = useNavigate()
     const user = useSelector(storeState => storeState.loggedInUser)
-    
+
     function onLogout() {
         logout()
             .then(() => {
@@ -24,8 +24,23 @@ export function AppHeader() {
             })
     }
 
+    function getStyleByUser() {
+        const prefs = {
+            color: '',
+            backgroundColor: ''
+        }
+
+        if (user && user.pref) {
+            prefs.color = user.pref.color
+            prefs.backgroundColor = user.pref.bgColor
+        }
+
+        return prefs
+    }
+
+
     return (
-        <header className="app-header full main-layout">
+        <header style={getStyleByUser()} className="app-header full main-layout">
             <section className="header-container">
                 <h1>React Todo App</h1>
                 {user ? (

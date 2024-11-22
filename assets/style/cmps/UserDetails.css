@@ -1,0 +1,68 @@
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--clr1bg);
+    color: var(--color, #eeeeee);
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--color, #ffffff);
+    margin-bottom: 20px;
+}
+
+.activities-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.activities-form label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--color, #ffffff);
+}
+
+.activities-form input[type="text"],
+.activities-form input[type="color"] {
+    font-size: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color, #ffffff);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.activities-form input[type="text"]:focus,
+.activities-form input[type="color"]:focus {
+    border-color: var(--color, #00ff00);
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.activities-form button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(135deg, #007BFF, #00D4FF);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.activities-form button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.5);
+}
+
+.activities-form button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}

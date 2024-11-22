@@ -2,6 +2,8 @@ const { useState, useEffect } = React
 const { useNavigate } = ReactRouterDOM
 const { useSelector, } = ReactRedux
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
+import { updateUser } from '../store/actions/user.actions.js'
+
 
 
 export function UserDetails() {
