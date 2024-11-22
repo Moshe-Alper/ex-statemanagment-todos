@@ -57,8 +57,8 @@ function save(todo) {
     }
 }
 
-function getEmptyTodo(txt = '', importance = 5) {
-    return { txt, importance, isDone: false }
+function getEmptyTodo(txt = '', importance = 5, color = '#ffffff') {
+    return { txt, importance, isDone: false, color }
 }
 
 function getDefaultFilter() {
@@ -98,8 +98,8 @@ function _createTodos() {
     }
 }
 
-function _createTodo(txt, importance) {
-    const todo = getEmptyTodo(txt, importance)
+function _createTodo(txt, importance, color) {
+    const todo = getEmptyTodo(txt, importance, color)
     todo._id = utilService.makeId()
     todo.createdAt = todo.updatedAt = Date.now() - utilService.getRandomIntInclusive(0, 1000 * 60 * 60 * 24)
     return todo
