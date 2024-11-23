@@ -58,8 +58,6 @@ export function UserDetails() {
         setUserDetails((prevUser) => ({ ...prevUser, [field]: value }))
     }
 
-    console.log('loggedInUser:', loggedInUser)
-    console.log('userDetails:', userDetails)
     if (!loggedInUser || !userDetails) return <div>No user</div>
     const { activities } = userDetails
     return (

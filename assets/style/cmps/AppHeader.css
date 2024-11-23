@@ -32,3 +32,32 @@ a.active {
         color: var(--clr2bg-light);
     }
 }
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--primary-color, #28a745);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.progress-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--progress-bg, #dfffd6);
+    color: var(--progress-text-color, #28a745);
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 2px solid var(--progress-border, #28a745);
+}

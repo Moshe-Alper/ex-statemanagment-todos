@@ -8,6 +8,7 @@ export const SET_TODOS = 'SET_TODOS'
 export const REMOVE_TODO = 'REMOVE_TODO'
 export const ADD_TODO = 'ADD_TODO'
 export const UPDATE_TODO = 'UPDATE_TODO'
+export const SET_DONE_TODOS_PERCENT = 'SET_DONE_TODOS_PERCENT'
 
 // Loading
 export const SET_LOADING = 'SET_LOADING'
@@ -23,6 +24,7 @@ const initialState = {
     isLoading: false,
     filterBy: todoService.getDefaultFilter(),
     loggedInUser: userService.getLoggedinUser(),
+    doneTodosPercent: 0,
 }
 
 function appReducer(state = initialState, cmd = {}) {
@@ -47,9 +49,8 @@ function appReducer(state = initialState, cmd = {}) {
                 todos: state.todos.map(todo => todo._id === cmd.todo._id ? cmd.todo : todo)
             }
 
-        //* Loading
-        case SET_LOADING:
-            return { ...state, isLoading: cmd.isLoading }
+        case SET_DONE_TODOS_PERCENT:
+            return { ...state, doneTodosPercent: cmd.doneTodosPercent }
 
         //* Filtering
         case SET_FILTER_BY:
@@ -57,6 +58,10 @@ function appReducer(state = initialState, cmd = {}) {
                 ...state,
                 filterBy: { ...state.filterBy, ...cmd.filterBy }
             }
+
+        //* Loading
+        case SET_LOADING:
+            return { ...state, isLoading: cmd.isLoading }
 
         //* User
         case SET_USER:

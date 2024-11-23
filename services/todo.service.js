@@ -13,6 +13,7 @@ export const todoService = {
     getDefaultFilter,
     getFilterFromSearchParams,
     getImportanceStats,
+    getDoneTodosPercent,
 }
 // For Debug (easy access from console):
 window.cs = todoService
@@ -20,6 +21,7 @@ window.cs = todoService
 function query(filterBy = {}) {
     return storageService.query(TODO_KEY)
         .then(todos => {
+
             if (filterBy.txt) {
                 const regExp = new RegExp(filterBy.txt, 'i')
                 todos = todos.filter(todo => regExp.test(todo.txt))
@@ -33,7 +35,8 @@ function query(filterBy = {}) {
                 todos = todos.filter((todo) => (filterBy.isDone === 'done' ? todo.isDone : !todo.isDone))
             }
 
-            return todos
+            const filteredTodosLength = todos.length
+            return includeDataFromServer({ todos, filteredTodosLength })
         })
 }
 
@@ -130,6 +133,25 @@ function _getTodoCountByImportanceMap(todos) {
     return todoCountByImportanceMap
 }
 
+function includeDataFromServer(data = {}) {
+    return Promise.all([getDoneTodosPercent()])
+        .then(([doneTodosPercent]) => {
+            return {doneTodosPercent, ...data }
+        })
+}
+
+//* Demo function thats mimic the total todos and percent in header
+function getDoneTodosPercent() {
+    return storageService.query(TODO_KEY)
+        .then(todos => {
+            const doneTodosCount = todos.reduce((acc, todo) => todo.isDone ? acc + 1 : acc, 0)
+            return (doneTodosCount / todos.length) * 100 || 0
+        })
+        .catch(err => {
+            console.error('Cannot get done todos percent:', err)
+            throw err
+        })
+}
 
 // Data Model:
 // const todo = {
