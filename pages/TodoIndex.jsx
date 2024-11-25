@@ -9,6 +9,7 @@ import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { loadTodos, removeTodo, setfilterBy, saveTodo } from "../store/actions/todo.actions.js"
 import { changeBalance } from '../store/actions/user.actions.js'
+import { LoaderWrapper } from "../cmps/LoaderWrapper.jsx"
 
 export function TodoIndex() {
     const todos = useSelector(storeState => storeState.todos)
@@ -66,13 +67,10 @@ export function TodoIndex() {
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>
             <h2>Todos List</h2>
-            {!isLoading ?
+            <LoaderWrapper isLoading={isLoading} />
                 <TodoList todos={todos}
                     onRemoveTodo={onRemoveTodo}
                     onToggleTodo={onToggleTodo} />
-                : <div>Loading...</div>
-            }
-            <hr />
             <h2>Todos Table</h2>
             <div style={{ width: '60%', margin: 'auto' }}>
                 <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />
