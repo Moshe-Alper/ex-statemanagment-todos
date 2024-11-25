@@ -7,7 +7,7 @@ import { TodoList } from "../cmps/TodoList.jsx"
 import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { loadTodos, removeTodo, setfilterBy, saveTodo } from "../store/actions/todo.actions.js"
+import { loadTodos, removeTodo, setFilterBy, saveTodo } from "../store/actions/todo.actions.js"
 import { changeBalance } from '../store/actions/user.actions.js'
 import { LoaderWrapper } from "../cmps/LoaderWrapper.jsx"
 
@@ -21,7 +21,7 @@ export function TodoIndex() {
 
 
     useEffect(() => {
-        onSetfilterBy({ ...defaultFilter })
+        onSetFilterBy({ ...defaultFilter })
     }, [])
 
     useEffect(() => {
@@ -56,13 +56,13 @@ export function TodoIndex() {
             .catch(() => showErrorMsg('Had trouble updating the todo'))
     }
 
-    function onSetfilterBy(filterBy) {
-        setfilterBy({ ...filterBy })
+    function onSetFilterBy(filterBy) {
+        setFilterBy({ ...filterBy })
     }
 
     return (
         <section className="todo-index">
-            <TodoFilter filterBy={defaultFilter} onSetFilterBy={onSetfilterBy} />
+            <TodoFilter filterBy={defaultFilter} onSetFilterBy={onSetFilterBy} />
             <div>
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>

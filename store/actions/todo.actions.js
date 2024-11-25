@@ -1,5 +1,5 @@
 import { todoService } from "../../services/todo.service.js";
-import { SET_TODOS, REMOVE_TODO, UPDATE_TODO, ADD_TODO, SET_LOADING, SET_FILTER_BY, SET_DONE_TODOS_PERCENT, store } from "../store.js";
+import { REMOVE_TODO, SET_DONE_TODOS_PERCENT, SET_FILTER_BY, SET_LOADING, SET_TODOS, UPDATE_TODO } from "../reducers/todo.reducer.js";
 
 export function loadTodos() {
     const filterBy = store.getState().filterBy
@@ -43,7 +43,7 @@ export function saveTodo(todo) {
     return todoService.save(todo)
         .then(({ doneTodosPercent, savedTodo }) => {
             store.dispatch({
-                type,
+                type, UPDATE_TODO,
                 todo: savedTodo
             })
             _setTodosData(doneTodosPercent)
@@ -55,7 +55,7 @@ export function saveTodo(todo) {
         })
 }
 
-export function setfilterBy(filterBy) {
+export function setFilterBy(filterBy) {
     const cmd = {
         type: SET_FILTER_BY,
         filterBy,
