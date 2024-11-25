@@ -1,9 +1,10 @@
 import { todoService } from "../../services/todo.service.js";
 import { SET_TODOS, REMOVE_TODO, UPDATE_TODO, ADD_TODO, SET_LOADING, SET_FILTER_BY, SET_DONE_TODOS_PERCENT, store } from "../store.js";
 
-export function loadTodos(filterSort) {
+export function loadTodos() {
+    const filterBy = store.getState().filterBy
     store.dispatch({ type: SET_LOADING, isLoading: true })
-    return todoService.query(filterSort)
+    return todoService.query(filterBy)
         .then(({ todos, doneTodosPercent }) => {
             store.dispatch({
                 type: SET_TODOS,
@@ -48,17 +49,13 @@ export function saveTodo(todo) {
             _setTodosData(doneTodosPercent)
             return savedTodo
         })
-        .then(res => {
-            const actionName = (todo._id) ? 'Updated' : 'Added'
-            return addActivity(`${actionName} a Todo: ` + todo.txt).then(() => res)
-        })
         .catch(err => {
             console.error('Cannot save todo:', err)
             throw err
         })
 }
 
-export function setFilterSort(filterBy) {
+export function setfilterBy(filterBy) {
     const cmd = {
         type: SET_FILTER_BY,
         filterBy,

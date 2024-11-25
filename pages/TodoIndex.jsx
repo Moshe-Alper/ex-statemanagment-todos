@@ -7,7 +7,8 @@ import { TodoList } from "../cmps/TodoList.jsx"
 import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { loadTodos, removeTodo, setFilterSort } from "../store/actions/todo.actions.js"
+import { loadTodos, removeTodo, setfilterBy, saveTodo } from "../store/actions/todo.actions.js"
+import { changeBalance } from '../store/actions/user.actions.js'
 
 export function TodoIndex() {
     const todos = useSelector(storeState => storeState.todos)
@@ -19,7 +20,7 @@ export function TodoIndex() {
 
 
     useEffect(() => {
-        onSetFilterSort({ ...defaultFilter })
+        onSetfilterBy({ ...defaultFilter })
     }, [])
 
     useEffect(() => {
@@ -42,23 +43,25 @@ export function TodoIndex() {
 
     function onToggleTodo(todo) {
         const todoToSave = { ...todo, isDone: !todo.isDone }
-        savedTodo(todoToSave)
-            .then((savedTodo) => {
-                showSuccessMsg(`Todo is ${(savedTodo.isDone) ? 'done' : 'back on your list'}`)
+
+        saveTodo(todoToSave)
+            .then(({ savedTodo }) => {
+                showSuccessMsg(`Updated ${savedTodo.txt} successfully`)
+                if (savedTodo.isDone) {
+                    console.log('savedTodo.isDone:', savedTodo.isDone)
+                    return changeBalance(10)
+                }
             })
-            .catch(err => {
-                console.log('err:', err)
-                showErrorMsg('Cannot toggle todo ' + todoId)
-            })
+            .catch(() => showErrorMsg('Had trouble updating the todo'))
     }
 
-    function onSetFilterSort(filterSort) {
-        setFilterSort({ ...filterSort })
+    function onSetfilterBy(filterBy) {
+        setfilterBy({ ...filterBy })
     }
 
     return (
         <section className="todo-index">
-            <TodoFilter filterBy={defaultFilter} onSetFilterBy={onSetFilterSort} />
+            <TodoFilter filterBy={defaultFilter} onSetFilterBy={onSetfilterBy} />
             <div>
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>

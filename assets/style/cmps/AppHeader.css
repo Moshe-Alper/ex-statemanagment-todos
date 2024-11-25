@@ -1,63 +1,95 @@
 .app-header {
     background-color: var(--clr1);
     color: var(--clr2bg-light);
-    
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .header-container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .header-container h1 {
     flex-grow: 1;
+    font-size: 1.5rem;
 }
 
 .app-nav {
     display: flex;
-    gap: 15px;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
+.app-nav a {
+    text-decoration: none;
+    color: var(--clr2bg-light);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
 
-a.active {
+.app-nav a.active,
+.app-nav a:hover {
     color: rgb(241, 212, 241);
-    font-weight: 600;
     text-decoration: underline;
-}
-
-
-@media (max-width: 720px) {
-    .app-header {
-        color: var(--clr2bg-light);
-    }
 }
 
 .user-info {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
 }
 
 .progress-info {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 0.5rem;
     color: var(--primary-color, #28a745);
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
 }
 
 .progress-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
     background-color: var(--progress-bg, #dfffd6);
     color: var(--progress-text-color, #28a745);
     font-size: 0.8rem;
     font-weight: bold;
     border: 2px solid var(--progress-border, #28a745);
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-actions h1 {
+    font-size: 1rem;
+}
+
+@media (max-width: 720px) {
+    .header-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .app-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-info {
+        align-items: center;
+    }
 }

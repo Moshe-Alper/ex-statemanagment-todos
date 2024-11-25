@@ -1,5 +1,6 @@
 import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
+import { userService } from './user.service.js'
 
 const TODO_KEY = 'todoDB'
 _createTodos()
@@ -53,15 +54,9 @@ function remove(todoId) {
 }
 
 function save(todo) {
-    if (todo._id) {
-        // TODO - updatable fields
-        todo.updatedAt = Date.now()
-        return storageService.put(TODO_KEY, todo)
-    } else {
-        todo.createdAt = todo.updatedAt = Date.now()
-
-        return storageService.post(TODO_KEY, todo)
-    }
+    if (!userService.getLoggedinUser()) return Promise.reject('User is not logged in')
+    return ((todo._id) ? _edit(todo) : _add(todo))
+        .then((savedTodo) => includeDataFromServer({ savedTodo }))
 }
 
 function getEmptyTodo(txt = '', importance = 5, color = '#ffffff') {
@@ -149,6 +144,29 @@ function getDoneTodosPercent() {
         })
         .catch(err => {
             console.error('Cannot get done todos percent:', err)
+            throw err
+        })
+}
+
+function _add(todo) {
+    todo = { ...todo }
+    todo.createdAt = todo.updatedAt = Date.now()
+    todo.color = utilService.getRandomColor()
+    return storageService.post(TODO_KEY, todo)
+        .catch(err => {
+            console.error('Cannot add todo:', err)
+            throw err
+        })
+
+
+}
+
+function _edit(todo) {
+    todo = { ...todo }
+    todo.updatedAt = Date.now()
+    return storageService.put(TODO_KEY, todo)
+        .catch(err => {
+            console.error('Cannot update todo:', err)
             throw err
         })
 }

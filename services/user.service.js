@@ -11,6 +11,7 @@ export const userService = {
     getEmptyCredentials,
     updateUserPreffs,
     getDefaultPrefs,
+    updateBalance,
 }
 const STORAGE_KEY_LOGGEDIN = 'user'
 const STORAGE_KEY = 'userDB'
@@ -61,6 +62,20 @@ function getEmptyCredentials() {
         username: 'muki',
         password: 'muki1',
     }
+}
+
+function updateBalance(diff) {
+    const loggedinUser = getLoggedinUser()
+    if (!loggedinUser) return
+    return getById(loggedinUser._id)
+        .then(user => {
+            user.balance += diff
+            return storageService.put(STORAGE_KEY, user)
+                .then((user) => {
+                    _setLoggedinUser(user)
+                    return user.balance
+                })
+        })
 }
 
 function updateUserPreffs(userToUpdate) {

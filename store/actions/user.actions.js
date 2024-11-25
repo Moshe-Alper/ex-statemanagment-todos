@@ -1,5 +1,5 @@
 import { userService } from "../../services/user.service.js";
-import { SET_USER, store } from "../store.js";
+import { SET_USER, SET_USER_BALANCE, store } from "../store.js";
 
 export function updateUser(userToUpdate) {
     return userService.updateUserPreffs(userToUpdate)
@@ -45,6 +45,18 @@ export function logout() {
         })
         .catch((err) => {
             console.log('user actions -> Cannot logout', err)
+            throw err
+        })
+}
+
+export function changeBalance(amount) {
+    return userService.updateBalance(amount)
+        .then(newBalance => {
+            store.dispatch({ type: SET_USER_BALANCE, balance: newBalance })
+            return newBalance
+        })
+        .catch(err => {
+            console.error('Cannot change balance:', err)
             throw err
         })
 }
