@@ -1,8 +1,9 @@
 import { todoService } from "../../services/todo.service.js";
-import { REMOVE_TODO, SET_DONE_TODOS_PERCENT, SET_FILTER_BY, SET_LOADING, SET_TODOS, UPDATE_TODO } from "../reducers/todo.reducer.js";
+import { REMOVE_TODO, SET_DONE_TODOS_PERCENT, SET_FILTER_BY, SET_LOADING, SET_TODOS, UPDATE_TODO, ADD_TODO } from "../reducers/todo.reducer.js";
+import { store } from "../store.js"
 
 export function loadTodos() {
-    const filterBy = store.getState().filterBy
+    const filterBy = store.getState().todoModule.filterBy
     store.dispatch({ type: SET_LOADING, isLoading: true })
     return todoService.query(filterBy)
         .then(({ todos, doneTodosPercent }) => {
@@ -22,6 +23,7 @@ export function loadTodos() {
         })
 }
 
+
 export function removeTodo(todoId) {
     return todoService.remove(todoId)
         .then(({ doneTodosPercent }) => {
@@ -31,7 +33,6 @@ export function removeTodo(todoId) {
             })
             _setTodosData(doneTodosPercent)
         })
-        .then(() => addActivity('Removed the Todo: ' + todoId))
         .catch(err => {
             console.error('Cannot remove todo:', err)
             throw err
@@ -70,3 +71,4 @@ function _setTodosData(doneTodosPercent) {
     })
 
 }
+

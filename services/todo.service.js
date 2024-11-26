@@ -51,7 +51,13 @@ function get(todoId) {
 
 function remove(todoId) {
     return storageService.remove(TODO_KEY, todoId)
+        .then(() => includeDataFromServer())
+        .catch(err => {
+            console.error('Cannot remove todo:', err)
+            throw err
+        })
 }
+
 
 function save(todo) {
     if (!userService.getLoggedinUser()) return Promise.reject('User is not logged in')
@@ -59,7 +65,7 @@ function save(todo) {
         .then((savedTodo) => includeDataFromServer({ savedTodo }))
 }
 
-function getEmptyTodo(txt = '', importance = 5, color = '#ffffff') {
+function getEmptyTodo(txt = '', importance = 5, color = 'rgb(96, 107, 91)') {
     return { txt, importance, isDone: false, color }
 }
 
@@ -151,14 +157,11 @@ function getDoneTodosPercent() {
 function _add(todo) {
     todo = { ...todo }
     todo.createdAt = todo.updatedAt = Date.now()
-    todo.color = utilService.getRandomColor()
     return storageService.post(TODO_KEY, todo)
         .catch(err => {
             console.error('Cannot add todo:', err)
             throw err
         })
-
-
 }
 
 function _edit(todo) {

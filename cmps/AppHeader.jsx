@@ -12,9 +12,9 @@ import { logout } from '../store/actions/user.actions.js'
 
 export function AppHeader() {
     const navigate = useNavigate()
-    const user = useSelector(storeState => storeState.loggedInUser)
-    const todos = useSelector((storeState) => storeState.todos)
-    const doneTodosPercent = useSelector((storeState) => storeState.doneTodosPercent)
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
+    const todos = useSelector((storeState) => storeState.todoModule.todos)
+    const doneTodosPercent = useSelector((storeState) => storeState.todoModule.doneTodosPercent)
 
     function onLogout() {
         logout()

@@ -12,12 +12,12 @@ import { changeBalance } from '../store/actions/user.actions.js'
 import { LoaderWrapper } from "../cmps/LoaderWrapper.jsx"
 
 export function TodoIndex() {
-    const todos = useSelector(storeState => storeState.todos)
-    const isLoading = useSelector(storeState => storeState.isLoading)
+    const todos = useSelector(storeState => storeState.todoModule.todos)
+    const isLoading = useSelector(storeState => storeState.todoModule.isLoading)
     // Special hook for accessing search-params:
     const [searchParams, setSearchParams] = useSearchParams()
     const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
-    const filterBy = useSelector((storeState) => storeState.filterBy)
+    const filterBy = useSelector((storeState) => storeState.todoModule.filterBy)
 
 
     useEffect(() => {
@@ -67,10 +67,17 @@ export function TodoIndex() {
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>
             <h2>Todos List</h2>
-            <LoaderWrapper isLoading={isLoading} />
-                <TodoList todos={todos}
+            <LoaderWrapper isLoading={isLoading}>
+            {todos.length ? (
+                <TodoList
+                    todos={todos}
                     onRemoveTodo={onRemoveTodo}
-                    onToggleTodo={onToggleTodo} />
+                    onToggleTodo={onToggleTodo}
+                />
+            ) : (
+                <p>No todos to show...</p>
+            )}
+        </LoaderWrapper>
             <h2>Todos Table</h2>
             <div style={{ width: '60%', margin: 'auto' }}>
                 <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />

@@ -8,7 +8,7 @@ import { updateUser } from '../store/actions/user.actions.js'
 
 export function UserDetails() {
 
-    const loggedInUser = useSelector((storeState) => storeState.loggedInUser)
+    const loggedInUser = useSelector((storeState) => storeState.userModule.loggedInUser)
     const [userDetails, setUserDetails] = useState(null)
     const navigate = useNavigate()
 
